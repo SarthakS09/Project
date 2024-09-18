@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Assistant</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'); /* Import Font Awesome */
+        
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Merriweather", serif;
+            background-color: #F2F2E4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+        h1{
+            text-shadow: 1px 1px 1px #000000;
+            font-family: "Dancing Script", cursive;
+            color: #04A5CB; 
+            font-size: 65px;
+        }
+        h6{
+            text-shadow: 1px 1px 1px #000000;
+            font-family: "Dancing Script", cursive;
+            color: #04A5CB; 
+            font-size: 20px;
+        }   
+        .container {
+            text-align: center;
+            color: white;
+        }
+        .input-container {
+            display: inline-flex;
+            border: 3px solid #000000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 50px rgba(0, 0, 0, 0.100); /* Subtle shadow for a professional look */
+        }
+        .input-container input[type="text"] {
+            padding: 15px 20px;
+            font-size: 18px;
+            border: none;
+            width: 400px;
+            outline: none;
+        }
+        .input-container button {
+            padding: 15px 20px;
+            font-size: 18px;
+            border: none;
+            background-color: #008CFF; /* Blue button */
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .input-container button:hover {
+            background-color: #006bb3; /* Darker blue on hover */
+        }
+        .input-container input::placeholder {
+            color: #888; /* Lighter color for placeholder */
+        }
+        .response {
+            margin-top: 10px;
+            padding: 15px 20px;
+            background-color: white;
+            color: black;
+            border-radius: 10px;
+            max-width: 500px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01); /* Subtle shadow for a professional look */
+            word-wrap: break-word;
+            text-align: left;
+        }
+        /* Home Button Style */
+        .home-button {
+            padding-left:25px;
+            padding-top:25px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 30px;
+            color: #04A5CB;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .home-button:hover {
+            color: #006bb3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Button -->
+    <a href="/" class="home-button">
+        <i class="fas fa-home"></i>
+    </a>
+
+    <div class="container">
+        <h1>ROBYN</h1>
+        <h6>Presonal Assistance</h6>
+        <form action="/chat" method="post" class="input-container">
+            <input type="text" id="message" name="message" placeholder="Type your message here..." required>
+            <button type="submit">></button>
+        </form>
+
+        {% if response %}
+        <div class="response">
+            {{ response }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

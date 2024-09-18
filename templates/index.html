@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Service</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #F2F2E4;
+            padding-top: 100px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .button-container a {
+            padding: 15px 40px;
+            font-size: 20px;
+            text-decoration: none;
+            color: #0056b3;
+            background-color: #f4f4f4;
+            border-radius: 30px; /* Rounded corners */
+            border: 2px solid #0056b3; /* Border color */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .button-container a:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        .typewriter {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .typewriter .static-text {
+            text-shadow: 1px 1px 1px #000000;
+            font-family: "Dancing Script", cursive;
+            color: #04A5CB; 
+            font-size: 65px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .typewriter .dynamic-text {
+            color: #0056b3;
+            font-weight: 500;
+            display: inline-block;
+            position: relative;
+            font-size: 32px;
+        }
+
+        .typewriter .cursor {
+            color: #0056b3;
+            font-weight: 500;
+            margin-left: 5px;
+            font-size: 32px;
+            animation: blink 0.7s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="typewriter">
+        <div class="static-text">ROBYN</div>
+        <div>
+            <span class="dynamic-text"></span>
+            <span class="cursor">|</span>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <a href="/summarize">PDF Summarizer</a>
+        <a href="/chat">Chat with Robyn</a>
+    </div>
+
+    <script>
+        const words = ["Personal Assistant", "PDF Summarizer"];
+        let i = 0;
+        let j = 0;
+        let isDeleting = false;
+        const speed = 100; // Speed of typing/deleting in ms
+        const pauseTime = 1500; // Time to pause after a word is typed
+
+        function typeWriter() {
+            const dynamicText = document.querySelector(".dynamic-text");
+            const cursor = document.querySelector(".cursor");
+            let currentWord = words[i];
+            let displayText = currentWord.slice(0, j);
+
+            dynamicText.textContent = displayText;
+
+            if (!isDeleting && j < currentWord.length) {
+                j++;
+                setTimeout(typeWriter, speed);
+            } else if (isDeleting && j > 0) {
+                j--;
+                setTimeout(typeWriter, speed);
+            } else if (!isDeleting && j === currentWord.length) {
+                setTimeout(() => {
+                    isDeleting = true;
+                    setTimeout(typeWriter, speed);
+                }, pauseTime);
+            } else if (isDeleting && j === 0) {
+                isDeleting = false;
+                i = (i + 1) % words.length;
+                setTimeout(typeWriter, speed);
+            }
+        }
+
+        typeWriter();
+    </script>
+</body>
+</html>
