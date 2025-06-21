@@ -1,18 +1,22 @@
+import os
 from flask import Flask, request, render_template, redirect, url_for
 import PyPDF2
 import requests
 import google.generativeai as genai
+from dotenv import load_dotenv
+
+# Load API keys from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
-# Hugging Face API key and URL (Free API)
+# Hugging Face API key and URL
 HUGGING_FACE_API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
-HUGGING_FACE_API_KEY = "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"
-
+HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY")
 headers = {"Authorization": f"Bearer {HUGGING_FACE_API_KEY}"}
 
-# Google Gemini API Key
-GENAI_API_KEY = "AIzaSyCUCfvQG4rO_XigA0gqMvU_DauvtAw4DO0"
+# Google Gemini API key
+GENAI_API_KEY = os.getenv("GENAI_API_KEY")
 
 # Helper function to extract text from a PDF
 def extract_text_from_pdf(pdf_file):
@@ -26,7 +30,7 @@ def extract_text_from_pdf(pdf_file):
 def summarize_text(text):
     payload = {"inputs": text}
     response = requests.post(HUGGING_FACE_API_URL, headers=headers, json=payload)
-    
+
     if response.status_code == 200:
         return response.json()[0]["summary_text"]
     else:
@@ -37,29 +41,23 @@ def summarize_text(text):
 def index():
     return render_template('index.html')
 
-# Route for PDF summarization feature
+# Route for PDF summarization
 @app.route('/summarize', methods=['GET', 'POST'])
 def summarize_pdf():
     if request.method == 'POST':
-        if 'file' not in request.files:
+        if 'file' not in request.files or request.files['file'].filename == '':
             return redirect(url_for('index'))
-        
+
         file = request.files['file']
-        
-        if file.filename == '':
-            return redirect(url_for('index'))
-        
         if file and file.filename.endswith('.pdf'):
             extracted_text = extract_text_from_pdf(file)
-            
             if extracted_text:
                 summary = summarize_text(extracted_text)
                 return render_template('summarize.html', summary=summary)
             else:
                 return "Error: Could not extract text from PDF."
-        
         return "Error: Invalid file type. Only PDFs are allowed."
-    
+
     return render_template('summarize.html')
 
 # Route for Google Gemini chatbot
@@ -85,8 +83,8 @@ def chat():
             history=[
                 {"role": "user", "parts": ["act as a personal assistant\n"]},
                 {"role": "model", "parts": ["Okay, I'm ready to assist you!  Tell me, what can I do for you today? 😊\n"]},
-                {"role": "user", "parts": ["I own a semiconductor company. You are my assistant John Bihari."]},
-                {"role": "model", "parts": ["Understood, Mr. Iyer. I'm John Bihari, your personal assistant. My priority is to streamline your day.\n"]},
+                {"role": "user", "parts": ["I own a semiconductor company. You are my assistant Lada."]},
+                {"role": "model", "parts": ["Understood, Mr. Sarthak, I'm Lada, your personal assistant. My priority is to streamline your day.\n"]},
             ]
         )
 
@@ -97,6 +95,6 @@ def chat():
 
     return render_template("personal.html", response=None)
 
+# Run the app
 if __name__ == "__main__":
-    app.run(port=80, host="0.0.0.0")
-    
+    app.run(debug=True)
